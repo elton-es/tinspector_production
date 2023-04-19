@@ -20,6 +20,8 @@ class CRs:
                 self.set_crs_issues()
                 self.set_number_of_failed_tcs()
                 self.set_number_of_linked_crs()
+                self.crs_data = []
+                self.set_crs_data()
         except JIRAError as e:
             print('The issue ID is invalid or does not exist!\n' + str(e))
             self.tp_issue = None
@@ -50,8 +52,20 @@ class CRs:
             cr_issue = self.idart_connection.issue(key)
             self.crs_issues.append(cr_issue)
 
+    def set_crs_data(self):
+        for i in range(self.number_of_linked_crs):
+            self.crs_data.append([])
+            self.crs_data[i].append(self.get_key_from_cr(i))
+            self.crs_data[i].append(self.get_status_from_cr(i))
+            self.crs_data[i].append(self.get_labels_from_cr(i))
+            self.crs_data[i].append(self.get_watchers_from_cr(i))
+            self.crs_data[i].append(self.get_comments_from_cr(i))
+
     def set_number_of_failed_tcs(self):
         self.number_of_failed_tcs = len(self.failed_tcs_issues)
+
+    def get_cycle_name(self):
+        return self.tp_issue.fields.customfield_10101
 
     def set_number_of_linked_crs(self):
         self.number_of_linked_crs = len(self.crs_issues)

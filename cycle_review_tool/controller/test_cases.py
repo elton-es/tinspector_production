@@ -33,6 +33,7 @@ class TestCases:
         self.android_version = self.tcs_frame.get_android_version()
         if self.android_version == '' or self.android_version is None:
             print('The Android Version can\'t be empty!')
+            self.tcs_frame.show_warning('No Android Version selected', 'One Android Version needs to be selected!')
             return False
         return True
 

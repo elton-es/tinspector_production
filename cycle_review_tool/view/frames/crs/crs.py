@@ -83,15 +83,21 @@ class CRs:
         self.tv_crs_number.pack(padx=10)
 
         self.tv_android_version = Label(self.crs_review_frame)
-        self.tv_android_version['text'] = 'Type in the Android Version'
+        self.tv_android_version['text'] = 'Choose the Android Version'
         self.tv_android_version['background'] = '#E8E9E9'
         self.tv_android_version['font'] = ('Calibri', 12)
         self.tv_android_version.pack(padx=10, pady=5)
 
-        self.android_version_entry = Entry(self.crs_review_frame)
-        self.android_version_entry['font'] = ('Calibri', 12)
-        self.android_version_entry['justify'] = 'center'
-        self.android_version_entry.pack(fill=X, padx=10)
+        self.lb_android_version = Listbox(self.crs_review_frame)
+        self.lb_android_version['height'] = 5
+        self.lb_android_version['justify'] = 'center'
+        self.lb_android_version.insert(END, 'Android 10 (Q)')
+        self.lb_android_version.insert(END, 'Android 11 (R)')
+        self.lb_android_version.insert(END, 'Android 12 (S)')
+        self.lb_android_version.insert(END, 'Android 13 (T)')
+        self.lb_android_version.insert(END, 'Android 14 (U)')
+        self.lb_android_version['font'] = ('Calibri', 10)
+        self.lb_android_version.pack(padx=10)
 
         self.tv_labels = Label(self.crs_review_frame)
         self.tv_labels['text'] = 'Type in the device\'s labels'
@@ -102,7 +108,7 @@ class CRs:
         self.labels_text = Text(self.crs_review_frame)
         self.labels_text['width'] = 30
         self.labels_text['height'] = 4
-        self.labels_text['font'] = ('Calibri', 11)
+        self.labels_text['font'] = ('Calibri', 10)
         self.labels_text.pack(fill=X, padx=10)
 
         self.tv_watchers = Label(self.crs_review_frame)
@@ -114,7 +120,7 @@ class CRs:
         self.watchers_text = Text(self.crs_review_frame)
         self.watchers_text['width'] = 20
         self.watchers_text['height'] = 4
-        self.watchers_text['font'] = ('Calibri', 11)
+        self.watchers_text['font'] = ('Calibri', 10)
         self.watchers_text.pack(fill=X, padx=10)
 
         self.tp_validate_button = Button(self.crs_review_frame)
@@ -156,8 +162,8 @@ class CRs:
         self.tv_data.column(7, width=400, anchor='c')
         self.tv_data.heading(1, text='Key')
         self.tv_data.heading(2, text='CR Status')
-        self.tv_data.heading(3, text='Were labels added?')
-        self.tv_data.heading(4, text='Were watchers added?')
+        self.tv_data.heading(3, text='Expected labels')
+        self.tv_data.heading(4, text='Expected watchers')
         self.tv_data.heading(5, text='Comments')
         self.tv_data.heading(6, text='Validation')
         self.tv_data.heading(7, text='Notes')
@@ -188,7 +194,7 @@ class CRs:
         return self.tp_id_entry.get()
 
     def get_android_version(self):
-        return self.android_version_entry.get()
+        return self.lb_android_version.get(ANCHOR)
 
     def get_devices_labels(self):
         return self.labels_text.get(1.0, END)
