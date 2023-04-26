@@ -1,31 +1,31 @@
-from jira import JIRAError
-
-
 class TestPlan:
-    def __init__(self, dalek_connection, tp_id):
+    def __init__(self, zephyr_connection, test_cycle_id):
         try:
-            self.tp_issue = dalek_connection.issue(tp_id)
-        except JIRAError as e:
+            self.zephyr_connection = zephyr_connection
+            self.test_cycle_issue = self.zephyr_connection.api.test_cycles.get_test_cycle(test_cycle_id)
+        except Exception as e:
             print('The issue ID is invalid or does not exist!\n' + str(e))
-            self.tp_issue = None
+            self.test_cycle_issue = None
 
-    def get_tp_field(self, field):
+    def get_name(self):
         try:
-            if field == 'summary':
-                return self.tp_issue.fields.summary
-            elif field == 'status':
-                return self.tp_issue.fields.status.name
-            elif field == 'build':
-                return self.tp_issue.fields.customfield_10120
-            elif field == 'configuration':
-                return self.tp_issue.fields.customfield_10122
-            elif field == 'hw_revision':
-                return self.tp_issue.fields.customfield_10514.value
-            else:
-                return 'Please, provide a valid field'
-        except JIRAError as e:
-            print('Issue Does Not Exist\n' + str(e))
-            return 'Please, provide a valid issue'
+            return self.test_cycle_issue['name']
+        except Exception as e:
+            print('Unable to get the status\n' + str(e))
+            return None
 
-    def check_if_is_tp(self):
-        return self.tp_issue.fields.issuetype.name == 'Test Plan'
+    def get_description(self):
+        try:
+            return self.test_cycle_issue['description']
+        except Exception as e:
+            print('Unable to get the status\n' + str(e))
+            return None
+
+    def get_status(self):
+        try:
+            status = self.test_cycle_issue['status']
+            status_issue = self.zephyr_connection.api.statuses.get_status(status['id'])
+            return status_issue['name']
+        except Exception as e:
+            print('Unable to get the status\n' + str(e))
+            return None

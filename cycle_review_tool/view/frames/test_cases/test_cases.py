@@ -24,19 +24,19 @@ class TestCases:
 
         # Params
         self.view_name_label = Label(self.tc_general_frame, width=20)
-        self.view_name_label['text'] = 'Test Cases View'
+        self.view_name_label['text'] = 'Test Executions View'
         self.view_name_label['background'] = '#E8E9E9'
         self.view_name_label['font'] = ('Calibri', 15, 'bold')
         self.view_name_label.pack(padx=10, pady=10)
 
         self.core_id_label = Label(self.tc_general_frame)
-        self.core_id_label['text'] = 'Core ID:'
+        self.core_id_label['text'] = 'User:'
         self.core_id_label['background'] = '#E8E9E9'
         self.core_id_label['font'] = ('Calibri', 12)
         self.core_id_label.pack(padx=10, pady=10)
 
         self.tp_id_label = Label(self.tc_general_frame)
-        self.tp_id_label['text'] = 'Test Plan ID'
+        self.tp_id_label['text'] = 'Test Cycle ID'
         self.tp_id_label['background'] = '#E8E9E9'
         self.tp_id_label['font'] = ('Calibri', 12)
         self.tp_id_label.pack(padx=10, pady=10)
@@ -48,7 +48,7 @@ class TestCases:
 
         self.tp_search_button = Button(self.tc_general_frame)
         self.tp_search_button['font'] = ('Calibri', 12)
-        self.tp_search_button['text'] = 'Search TP'
+        self.tp_search_button['text'] = 'Search Test Cycle'
         self.tp_search_button.pack(pady=10, padx=10, fill=X)
 
         # Frame for review info
@@ -64,39 +64,17 @@ class TestCases:
         self.tv_test_cycle['font'] = ('Calibri', 15, 'bold')
         self.tv_test_cycle.pack(padx=10, pady=10)
 
-        self.tv_test_cycle_name = Label(self.tc_review_frame)
-        self.tv_test_cycle_name['text'] = 'To be updated'
-        self.tv_test_cycle_name['background'] = '#E8E9E9'
-        self.tv_test_cycle_name['font'] = ('Calibri', 10)
-        self.tv_test_cycle_name.pack(padx=10)
-
         self.tv_tcs_number = Label(self.tc_review_frame)
-        self.tv_tcs_number['text'] = 'Number of TCs:'
+        self.tv_tcs_number['text'] = 'Number of Test Executions:'
         self.tv_tcs_number['background'] = '#E8E9E9'
         self.tv_tcs_number['font'] = ('Calibri', 10)
         self.tv_tcs_number.pack(padx=10)
 
         self.tv_crs_number = Label(self.tc_review_frame)
-        self.tv_crs_number['text'] = 'Number of CRs:'
+        self.tv_crs_number['text'] = 'Number of Issues:'
         self.tv_crs_number['background'] = '#E8E9E9'
         self.tv_crs_number['font'] = ('Calibri', 10)
         self.tv_crs_number.pack(padx=10)
-
-        self.tv_android_version = Label(self.tc_review_frame)
-        self.tv_android_version['text'] = 'Choose the Android Version'
-        self.tv_android_version['background'] = '#E8E9E9'
-        self.tv_android_version['font'] = ('Calibri', 12)
-        self.tv_android_version.pack(padx=10, pady=5)
-
-        self.lb_android_version = Listbox(self.tc_review_frame)
-        self.lb_android_version['height'] = 5
-        self.lb_android_version['justify'] = 'center'
-        self.lb_android_version.insert(END, 'Android 10 (Q)')
-        self.lb_android_version.insert(END, 'Android 11 (R)')
-        self.lb_android_version.insert(END, 'Android 12 (S)')
-        self.lb_android_version.insert(END, 'Android 13 (T)')
-        self.lb_android_version.insert(END, 'Android 14 (U)')
-        self.lb_android_version.pack(padx=10)
 
         self.tp_validate_button = Button(self.tc_review_frame)
         self.tp_validate_button['font'] = ('Calibri', 12)
@@ -128,18 +106,18 @@ class TestCases:
         self.tv_data['columns'] = (1, 2, 3, 4, 5, 6, 7)
         self.tv_data['show'] = 'headings'
         self.tv_data['height'] = 1080
-        self.tv_data.column(1, width=150, anchor='c')
-        self.tv_data.column(2, width=100, anchor='c')
+        self.tv_data.column(1, width=100, anchor='c')
+        self.tv_data.column(2, width=150, anchor='c')
         self.tv_data.column(3, width=150, anchor='c')
         self.tv_data.column(4, width=400, anchor='c')
         self.tv_data.column(5, width=400, anchor='c')
         self.tv_data.column(6, width=100, anchor='c')
         self.tv_data.column(7, width=400, anchor='c')
         self.tv_data.heading(1, text='Key')
-        self.tv_data.heading(2, text='Test Results')
-        self.tv_data.heading(3, text='Remote Defect CR')
-        self.tv_data.heading(4, text='Explanation')
-        self.tv_data.heading(5, text='Comments')
+        self.tv_data.heading(2, text='Environment')
+        self.tv_data.heading(3, text='Test Results')
+        self.tv_data.heading(4, text='Comments')
+        self.tv_data.heading(5, text='Issues')
         self.tv_data.heading(6, text='Validation')
         self.tv_data.heading(7, text='Notes')
         self.tv_data.pack(fill='both', padx=5, pady=5)
@@ -171,9 +149,6 @@ class TestCases:
     def get_tp_id(self):
         return self.tp_id_entry.get()
 
-    def get_android_version(self):
-        return self.lb_android_version.get(ANCHOR)
-
     def set_tv_value(self, row, column, value):
         self.tv_data.set(row, column, value)
 
@@ -182,9 +157,6 @@ class TestCases:
 
     def set_core_id(self, core_id):
         self.core_id_label['text'] = core_id
-
-    def set_test_cycle_name(self, test_cycle):
-        self.tv_test_cycle_name['text'] = test_cycle
 
     def set_number_of_tcs(self, number):
         self.tv_tcs_number['text'] = number

@@ -28,26 +28,25 @@ class Controller:
 
         self.root = window
         self.main_window = None
-        self.dalek_connection = None
-        self.idart_connection = None
+        self.jira_connection = None
+        self.zephyr_connection = None
 
     def set_up_main_window(self):
-        self.dalek_connection = self.login_controller.check_dalek_autentication()
-        self.idart_connection = self.login_controller.check_idart_autentication()
-        if self.dalek_connection and self.idart_connection:
+        self.jira_connection, self.zephyr_connection = self.login_controller.check_jira_authentication()
+        if self.jira_connection:
             self.create_main_window()
             self.show_tp_frame()
             self.root.after(2000, self.root.destroy())
 
     def create_main_window(self):
         self.main_window = main.Main(Tk())
-        self.test_plan_controller = test_plan_controller.TestPlan(self.main_window.window, self.dalek_connection)
-        self.test_plan_controller.tp_frame.set_core_id('Core ID: ' + self.login_controller.core_id)
+        self.test_plan_controller = test_plan_controller.TestPlan(self.main_window.window, self.zephyr_connection)
+        self.test_plan_controller.tp_frame.set_core_id('User: ' + self.login_controller.core_id)
         self.test_plan_controller.tp_frame.tp_validate_button['command'] = self.validate_data
-        self.test_cases_controller = test_cases_controller.TestCases(self.main_window.window, self.dalek_connection)
-        self.test_cases_controller.tcs_frame.set_core_id('Core ID: ' + self.login_controller.core_id)
-        self.crs_controller = crs_controller.CRs(self.main_window.window, self.dalek_connection, self.idart_connection)
-        self.crs_controller.crs_frame.set_core_id('Core ID: ' + self.login_controller.core_id)
+        self.test_cases_controller = test_cases_controller.TestCases(self.main_window.window, self.zephyr_connection)
+        self.test_cases_controller.tcs_frame.set_core_id('User: ' + self.login_controller.core_id)
+        self.crs_controller = crs_controller.CRs(self.main_window.window, self.jira_connection, self.zephyr_connection)
+        self.crs_controller.crs_frame.set_core_id('User: ' + self.login_controller.core_id)
         self.main_window.show_menu.entryconfig(0, command=self.show_tp_frame)
         self.main_window.show_menu.entryconfig(1, command=self.show_tc_frame)
         self.main_window.show_menu.entryconfig(3, command=self.show_crs_frame)

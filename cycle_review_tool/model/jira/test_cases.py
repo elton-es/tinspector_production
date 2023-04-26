@@ -1,85 +1,87 @@
-from jira import JIRAError
-
-
 class TestCases:
-    def __init__(self, dalek_connection, tp_id):
-        self.dalek_connection = dalek_connection
+    def __init__(self, zephyr_connection, jira_connection, test_cycle_id):
+        self.zephyr_connection = zephyr_connection
+        self.jira_connection = jira_connection
         try:
-            self.tp_issue = self.dalek_connection.issue(tp_id)
-            if self.check_if_is_tp():
-                self.test_cases_ids = []
-                self.test_cases_issues = []
-                self.set_test_cases_ids()
-                self.set_tcs_issues()
-                self.num_tcs = self.get_number_of_tcs()
-                self.test_cases_data = []
-                self.set_tcs_data()
-        except JIRAError as e:
-            print('The issue ID is invalid or does not exist!\n' + str(e))
-            self.tp_issue = None
+            self.test_cycle_issue = self.zephyr_connection.api.test_cycles.get_test_cycle(test_cycle_id)
+            if self.test_cycle_issue:
+                self.test_executions_keys = []
+                self.test_executions_issues = []
+                self.set_test_executions_keys_and_issues()
+                self.number_of_test_executions = 0
+                self.set_number_of_test_executions()
+                self.number_of_failed_test_executions = 0
+                self.number_of_issues = 0
+                self.set_number_of_failed_test_executions_and_issues()
+                self.test_executions_data = []
+        except Exception as e:
+            print('The Test Cycle ID is invalid or does not exist!\n' + str(e))
+            self.test_cycle_issue = None
 
-    def get_number_of_tcs(self):
-        return len(self.test_cases_issues)
+    def set_test_executions_keys_and_issues(self):
+        try:
+            test_executions = self.zephyr_connection.api.test_executions.get_test_executions()
+            for test_execution in test_executions:
+                if test_execution['testCycle']['id'] == self.test_cycle_issue['id']:
+                    self.test_executions_keys.append(test_execution['key'])
+                    self.test_executions_issues.append(test_execution)
+        except Exception as e:
+            print('Unable to set up the test executions ids and issues!\n' + str(e))
 
-    def get_cycle_name(self):
-        return self.tp_issue.fields.customfield_10101
+    def set_number_of_test_executions(self):
+        try:
+            self.number_of_test_executions = len(self.test_executions_keys)
+        except Exception as e:
+            print('Unable to set up the number of test executions!\n' + str(e))
 
-    def get_number_of_crs(self):
-        count = 0
-        for i in range(self.num_tcs):
-            if self.get_remote_defect_cr_from_tc(i) != '':
-                count += 1
-        return count
+    def get_environment(self, index):
+        try:
+            environment = self.test_executions_issues[index]['environment']
+            environment_issue = self.zephyr_connection.api.environments.get_environment(environment['id'])
+            return environment_issue['name']
+        except Exception as e:
+            print('Unable to get the test execution environment!\n' + str(e))
+            return None
 
-    def set_test_cases_ids(self):
-        for i in range(len(self.tp_issue.fields.issuelinks)):
-            key = self.tp_issue.fields.issuelinks[i].outwardIssue.raw['key']
-            self.test_cases_ids.append(key)
+    def get_test_result(self, index):
+        try:
+            status = self.test_executions_issues[index]['testExecutionStatus']
+            status_issue = self.zephyr_connection.api.statuses.get_status(status['id'])
+            return status_issue['name']
+        except Exception as e:
+            print('Unable to get the test execution result!\n' + str(e))
+            return None
 
-    def set_tcs_issues(self):
-        keys_to_be_removed = []
-        for key in self.test_cases_ids:
-            tc_issue = self.dalek_connection.issue(key)
-            if tc_issue.fields.issuetype.name == 'Test Case Execution':
-                self.test_cases_issues.append(tc_issue)
-            else:
-                keys_to_be_removed.append(key)
-        for key in keys_to_be_removed:
-            self.test_cases_ids.remove(key)
+    def get_comment(self, index):
+        try:
+            return self.test_executions_issues[index]['comment']
+        except Exception as e:
+            print('Unable to get the test execution comment!\n' + str(e))
+            return None
 
-    def set_tcs_data(self):
-        for i in range(self.num_tcs):
-            self.test_cases_data.append([])
-            self.test_cases_data[i].append(self.get_key_from_tc(i))
-            self.test_cases_data[i].append(self.get_test_results_from_tc(i))
-            self.test_cases_data[i].append(self.get_remote_defect_cr_from_tc(i))
-            self.test_cases_data[i].append(self.get_explanation_from_tc(i))
-            self.test_cases_data[i].append(self.get_comments_from_tc(i))
+    def get_issues_keys(self, index):
+        try:
+            issues_keys = []
+            issues = self.test_executions_issues[index]['links']['issues']
+            for issue in issues:
+                issue_object = self.jira_connection.issue(issue['issueId'])
+                issues_keys.append(issue_object.key)
+            return issues_keys
+        except Exception as e:
+            print('Unable to get the issues keys!\n' + str(e))
+            return None
 
-    def get_tcs_issues(self):
-        return self.test_cases_issues
-
-    def get_key_from_tc(self, index):
-        key = self.test_cases_issues[index].key
-        return '' if key is None else key
-
-    def get_test_results_from_tc(self, index):
-        test_results = self.test_cases_issues[index].fields.customfield_10148.value
-        return '' if test_results is None else test_results
-
-    def get_remote_defect_cr_from_tc(self, index):
-        cr = self.test_cases_issues[index].fields.customfield_10150
-        return '' if cr is None else cr
-
-    def get_explanation_from_tc(self, index):
-        explanation = self.test_cases_issues[index].fields.customfield_10901
-        return '' if explanation is None else explanation
-
-    def get_comments_from_tc(self, index):
-        comments = []
-        for comment in self.test_cases_issues[index].fields.comment.comments:
-            comments.append(comment.body)
-        return comments
-
-    def check_if_is_tp(self):
-        return self.tp_issue.fields.issuetype.name == 'Test Plan'
+    def set_number_of_failed_test_executions_and_issues(self):
+        try:
+            issues = []
+            for i in range(self.number_of_test_executions):
+                test_result = self.get_test_result(i)
+                if test_result == 'Fail':
+                    self.number_of_failed_test_executions += 1
+                    issues_keys = self.get_issues_keys(i)
+                    for issue in issues_keys:
+                        if issue not in issues:
+                            issues.append(issue)
+            self.number_of_issues = len(issues)
+        except Exception as e:
+            print('Unable to set the number of failed test executions and issues!\n' + str(e))
