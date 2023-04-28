@@ -1,4 +1,5 @@
 from art.model.jira import test_plan as test_plan_model
+from art.model.validator.test_plan import validator as test_plan_validator
 from art.view.frames.test_plan import test_plan as test_plan_view
 
 import re
@@ -8,8 +9,10 @@ class TestPlan:
     def __init__(self, window, zephyr_connection):
         self.tp_frame = test_plan_view.TestPlan(window)
         self.tp_frame.tp_search_button['command'] = self.search_tp_values
+        self.tp_frame.tp_validate_button['command'] = self.validate_data
         self.test_cycle_id = None
         self.test_plan_model = None
+        self.test_plan_validator = None
         self.zephyr_connection = zephyr_connection
         self.data = dict({'status': ''})
 
@@ -34,7 +37,6 @@ class TestPlan:
                 return False
             return True
 
-
     def search_tp_values(self):
         if self.connect_to_model():
             name = self.test_plan_model.get_name()
@@ -45,3 +47,17 @@ class TestPlan:
             self.tp_frame.set_tv_value(1, 3, status)
             self.tp_frame.set_tv_tags(1, 'fetched')
             self.tp_frame.enable_validate_button()
+
+    def validate_data(self):
+        if self.test_plan_model:
+            self.test_plan_validator = test_plan_validator.Validator(self.test_plan_model.test_cycle_data)
+            validation = self.test_plan_validator.validate_status()
+            note = self.test_plan_validator.validations[0]
+            if validation:
+                self.tp_frame.set_tv_tags(1, 'ok')
+                self.tp_frame.set_tv_value(1, 4, 'OK')
+            else:
+                self.tp_frame.set_tv_tags(1, 'not_ok')
+                self.tp_frame.set_tv_value(1, 4, 'Not OK')
+                self.tp_frame.set_tv_value(1, 5, note)
+

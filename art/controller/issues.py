@@ -1,6 +1,6 @@
 from art.model.jira import issues as crs_model
 from art.view.frames.crs import crs as crs_view
-from art.model.validator.crs import crs as crs_validator
+from art.model.validator.issues import issues as issues_validator
 
 import re
 
@@ -17,8 +17,8 @@ class Issues:
         self.test_cycle_id = None
         self.android_version = None
         self.labels = None
-        self.cr_watchers = None
-        self.crs_validator = None
+        self.issue_watchers = None
+        self.issues_validator = None
         self.validations = None
         self.zephyr_connection = zephyr_connection
         self.jira_connection = jira_connection
@@ -50,16 +50,16 @@ class Issues:
             return False
 
     def check_watchers_input(self):
-        self.cr_watchers = self.crs_frame.get_watchers()
-        self.cr_watchers = self.cr_watchers.split('\n')
-        self.cr_watchers = list(filter(lambda x: x != '', self.cr_watchers))
-        self.cr_watchers = [cr.replace(' ', '').replace(',', '') for cr in self.cr_watchers]
-        if len(self.cr_watchers) > 0:
+        self.issue_watchers = self.crs_frame.get_watchers()
+        self.issue_watchers = self.issue_watchers.split('\n')
+        self.issue_watchers = list(filter(lambda x: x != '', self.issue_watchers))
+        self.issue_watchers = [issue.replace(',', '') for issue in self.issue_watchers]
+        if len(self.issue_watchers) > 0:
             return True
         else:
             print('CR Watchers can not be empty!')
             self.crs_frame.show_warning('Empty CR Watchers', 'CR Watchers must be informed!')
-            self.cr_watchers = None
+            self.issue_watchers = None
             return False
 
     def connect_to_model(self):
@@ -92,9 +92,12 @@ class Issues:
         for i in range(self.number_of_linked_issues):
             key = self.crs_model.get_key_from_issue(i)
             issue_status = self.crs_model.get_status_from_issue(i)
+            comment = self.crs_model.get_comments_from_issue(i)[0].body
+            comment = comment.replace('<br>', '\n')
             self.crs_frame.set_tv_tags(i + 1, 'fetched')
             self.crs_frame.set_tv_value(i + 1, 1, key)
             self.crs_frame.set_tv_value(i + 1, 2, issue_status)
+            self.crs_frame.set_tv_value(i + 1, 5, comment)
 
     def clear_tv_values(self):
         for i in range(50):
@@ -108,11 +111,11 @@ class Issues:
 
     def validate_data(self):
         if self.crs_model:
-            if self.check_android_version_input() and self.check_device_labels_input() and self.check_watchers_input():
-                self.crs_validator = crs_validator.CRSValidator(self.crs_model.crs_data, self.android_version,
-                                                                self.device_labels, self.cr_watchers)
-                self.validations = self.crs_validator.validate_all()
-                for i in range(self.number_of_linked_crs):
+            if self.check_labels_input() and self.check_watchers_input():
+                self.issues_validator = issues_validator.IssuesValidator(self.crs_model.issues_data, self.labels,
+                                                                         self.issue_watchers)
+                self.validations = self.issues_validator.validate_all()
+                for i in range(self.number_of_linked_issues):
                     notes = self.validations[i][1]
                     validation = self.validations[i][2]
                     if any('Label' in item for item in notes):
@@ -134,7 +137,7 @@ class Issues:
                             actions += note + '\n'
                         if actions != '':
                             self.crs_frame.set_tv_value(i + 1, 7, actions)
-                self.crs_validator.generate_actions_message()
+                self.issues_validator.generate_actions_message()
                 self.crs_frame.disable_validate_button()
             else:
                 print('You can\'t validate data before searching the TP')

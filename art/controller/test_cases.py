@@ -103,25 +103,24 @@ class TestCases:
 
     def validate_data(self):
         if self.test_cases_model:
-            if self.check_android_version_input():
-                self.test_cases_validator = test_cases_validator.TestCasesValidator(self.test_cases_model.test_cases_data,
-                                                                                    self.android_version)
-                self.validations = self.test_cases_validator.validate_all()
-                for i in range(self.number_of_tcs):
-                    notes = self.validations[i][1]
-                    validation = self.validations[i][2]
-                    if validation:
-                        self.tcs_frame.set_tv_tags(i + 1, 'ok')
-                        self.tcs_frame.set_tv_value(i + 1, 6, 'OK')
-                    else:
-                        self.tcs_frame.set_tv_tags(i + 1, 'not_ok')
-                        self.tcs_frame.set_tv_value(i + 1, 6, 'Not OK')
-                        actions = ''
-                        for note in notes:
-                            actions += note + '\n'
-                        if actions != '':
-                            self.tcs_frame.set_tv_value(i + 1, 7, actions)
-                self.test_cases_validator.generate_actions_message()
-                self.tcs_frame.disable_validate_button()
+            self.test_cases_validator = test_cases_validator.TestCasesValidator(
+                self.test_cases_model.test_executions_data)
+            self.validations = self.test_cases_validator.validate_all()
+            for i in range(self.number_of_test_executions):
+                notes = self.validations[i][1]
+                validation = self.validations[i][2]
+                if validation:
+                    self.tcs_frame.set_tv_tags(i + 1, 'ok')
+                    self.tcs_frame.set_tv_value(i + 1, 6, 'OK')
+                else:
+                    self.tcs_frame.set_tv_tags(i + 1, 'not_ok')
+                    self.tcs_frame.set_tv_value(i + 1, 6, 'Not OK')
+                    actions = ''
+                    for note in notes:
+                        actions += note + '\n'
+                    if actions != '':
+                        self.tcs_frame.set_tv_value(i + 1, 7, actions)
+            self.test_cases_validator.generate_actions_message()
+            self.tcs_frame.disable_validate_button()
         else:
-            print('You can\'t validate data before searching the TP')
+            print('You can\'t validate data before searching the Test Cycle')

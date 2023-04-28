@@ -23,7 +23,7 @@ class Controller:
         # Setting up the test cases controller
         self.test_cases_controller = None
 
-        # Setting up the crs controller
+        # Setting up the issues controller
         self.crs_controller = None
 
         self.root = window
@@ -42,7 +42,6 @@ class Controller:
         self.main_window = main.Main(Tk())
         self.test_plan_controller = test_plan_controller.TestPlan(self.main_window.window, self.zephyr_connection)
         self.test_plan_controller.tp_frame.set_core_id('User: ' + self.login_controller.core_id)
-        self.test_plan_controller.tp_frame.tp_validate_button['command'] = self.validate_data
         self.test_cases_controller = test_cases_controller.TestCases(self.main_window.window, self.zephyr_connection,
                                                                      self.jira_connection)
         self.test_cases_controller.tcs_frame.set_core_id('User: ' + self.login_controller.core_id)
@@ -69,55 +68,3 @@ class Controller:
         self.test_plan_controller.tp_frame.frame.pack_forget()
         self.test_cases_controller.tcs_frame.frame.pack_forget()
         self.crs_controller.crs_frame.frame.pack_forget()
-
-    def validate_data(self):
-        validation = validator.Validator(self.test_plan_controller.data)
-        if validation.validate_status():
-            self.test_plan_controller.tp_frame.set_tv_value(2, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(2, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(2, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(2, 'not_ok')
-        if validation.validate_primary_sw():
-            self.test_plan_controller.tp_frame.set_tv_value(3, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(3, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(3, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(3, 'not_ok')
-        if validation.validate_hw_revision():
-            self.test_plan_controller.tp_frame.set_tv_value(4, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(4, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(4, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(4, 'not_ok')
-        if validation.validate_carrier():
-            self.test_plan_controller.tp_frame.set_tv_value(5, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(5, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(5, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(5, 'not_ok')
-        if validation.validate_sn():
-            self.test_plan_controller.tp_frame.set_tv_value(6, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(6, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(6, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(6, 'not_ok')
-        if validation.validate_sim_card():
-            self.test_plan_controller.tp_frame.set_tv_value(7, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(7, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(7, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(7, 'not_ok')
-        if validation.validate_sd_card():
-            self.test_plan_controller.tp_frame.set_tv_value(8, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(8, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(8, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(8, 'not_ok')
-        if validation.validate_hw_version():
-            self.test_plan_controller.tp_frame.set_tv_value(9, 4, 'OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(9, 'ok')
-        else:
-            self.test_plan_controller.tp_frame.set_tv_value(9, 4, 'Not OK')
-            self.test_plan_controller.tp_frame.set_tv_tags(9, 'not_ok')
-        self.test_plan_controller.tp_frame.disable_validate_button()

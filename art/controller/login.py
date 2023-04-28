@@ -26,7 +26,6 @@ class Login:
             self.jira_authenticator = jira_authenticator.JiraAuthenticator(self.project_url)
             self.jira_connection = self.jira_authenticator.authenticate_with_jira(self.core_id, self.password)
             self.zephyr_connection = self.jira_authenticator.authenticate_with_zephyr()
-            print('Zephyr connection: ' + str(self.zephyr_connection))
             if self.jira_connection and self.zephyr_connection:
                 self.login_view.change_message('User successfully autenticated!\nPlease wait a few seconds...',
                                                '#FFFFFF')

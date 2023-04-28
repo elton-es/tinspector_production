@@ -14,6 +14,7 @@ class TestCases:
                 self.number_of_issues = 0
                 self.set_number_of_failed_test_executions_and_issues()
                 self.test_executions_data = []
+                self.set_test_executions_data()
         except Exception as e:
             print('The Test Cycle ID is invalid or does not exist!\n' + str(e))
             self.test_cycle_issue = None
@@ -92,3 +93,12 @@ class TestCases:
             self.number_of_issues = len(issues)
         except Exception as e:
             print('Unable to set the number of failed test executions and issues!\n' + str(e))
+
+    def set_test_executions_data(self):
+        for i in range(self.number_of_test_executions):
+            self.test_executions_data.append([])
+            self.test_executions_data[i].append(self.test_executions_keys[i])
+            self.test_executions_data[i].append(self.get_environment(i))
+            self.test_executions_data[i].append(self.get_test_result(i))
+            self.test_executions_data[i].append(self.get_comment(i))
+            self.test_executions_data[i].append(self.get_issues_keys(i))
