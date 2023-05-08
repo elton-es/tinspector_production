@@ -40,6 +40,9 @@ class TestCasesValidator:
         if not comment:
             self.validations[index][1].append('Comment can not be empty')
             return False
+        elif not environment:
+            self.validations[index][1].append('Environment can not be empty')
+            return False
         elif environment in comment and 'Browser' in comment:
             return True
         else:

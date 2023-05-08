@@ -1,4 +1,5 @@
 from tkinter import *
+from pathlib import Path
 
 
 class Login:
@@ -7,7 +8,8 @@ class Login:
         window.geometry('500x500')
         window.resizable(False, False)
 
-        self.bg_image = PhotoImage(file='../resources/login.png')
+        path = Path(__file__).parent / './../resources/login.png'
+        self.bg_image = PhotoImage(file=path)
 
         self.bg = Label(window, image=self.bg_image)
         self.bg.image = self.bg_image

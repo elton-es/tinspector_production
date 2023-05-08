@@ -57,7 +57,7 @@ class TestCases:
 
     def set_number_of_issues(self):
         self.number_of_issues = self.test_cases_model.number_of_issues
-        self.tcs_frame.set_number_of_issues('Number of CRs: ' + str(self.number_of_issues))
+        self.tcs_frame.set_number_of_issues('Number of Issues: ' + str(self.number_of_issues))
 
     def update_tv_values(self):
         for i in range(self.number_of_test_executions):

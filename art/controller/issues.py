@@ -92,8 +92,11 @@ class Issues:
         for i in range(self.number_of_linked_issues):
             key = self.crs_model.get_key_from_issue(i)
             issue_status = self.crs_model.get_status_from_issue(i)
-            comment = self.crs_model.get_comments_from_issue(i)[0].body
-            comment = comment.replace('<br>', '\n')
+            if self.crs_model.get_comments_from_issue(i):
+                comment = self.crs_model.get_comments_from_issue(i)[0].body
+                comment = comment.replace('<br>', '\n')
+            else:
+                comment = None
             self.crs_frame.set_tv_tags(i + 1, 'fetched')
             self.crs_frame.set_tv_value(i + 1, 1, key)
             self.crs_frame.set_tv_value(i + 1, 2, issue_status)

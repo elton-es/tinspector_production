@@ -40,11 +40,15 @@ class IssuesValidator:
         return True
 
     def validate_issue_comments(self, index):
-        comment = self.values[index][4][0].body
-        if 'OS' in comment and 'Browser' in comment:
-            return True
+        if self.values[index][4]:
+            comment = self.values[index][4][0].body
+            if 'OS' in comment and 'Browser' in comment:
+                return True
+            else:
+                self.validations[index][1].append('OS and Browser must be informed in comments!')
+                return False
         else:
-            self.validations[index][1].append('OS and Browser must be informed in comments!')
+            self.validations[index][1].append('Comment can not be empty!')
             return False
 
     def validate_all(self):
