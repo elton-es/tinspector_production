@@ -10,7 +10,7 @@ class Main:
         self.window.resizable(True, True)
 
         self.menu = Menu(self.window)
-        self.menu['background'] = '#5C6156'
+        self.menu['background'] = '#10069F'
         self.menu['foreground'] = '#F6F7F7'
         self.menu['font'] = ('Helvetica', 10)
         self.menu.option_add('*tearOff', False)

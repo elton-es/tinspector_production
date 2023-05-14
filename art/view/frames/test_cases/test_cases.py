@@ -10,7 +10,7 @@ class TestCases:
         self.tc_params_frame = Frame(self.frame)
         self.tc_params_frame['width'] = 500
         self.tc_params_frame['height'] = 700
-        self.tc_params_frame['background'] = '#677756'
+        self.tc_params_frame['background'] = '#783176'
         self.tc_params_frame['highlightbackground'] = '#A9A9A9'
         self.tc_params_frame['highlightthickness'] = 1
         self.tc_params_frame.pack(side='left', fill='y', padx=2, pady=2)
@@ -86,7 +86,7 @@ class TestCases:
         self.tc_data_frame = Frame(self.frame)
         self.tc_data_frame['width'] = 1920
         self.tc_data_frame['height'] = 700
-        self.tc_data_frame['background'] = '#677756'
+        self.tc_data_frame['background'] = '#783176'
         self.tc_data_frame['highlightbackground'] = '#A9A9A9'
         self.tc_data_frame['highlightthickness'] = 1
         self.tc_data_frame.pack(side='right', fill='both', padx=2, pady=2)

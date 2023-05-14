@@ -4,8 +4,8 @@ from pathlib import Path
 
 class Login:
     def __init__(self, window=None):
-        window.title('ART - Automatic Review Tool')
-        window.geometry('500x500')
+        window.title('TInspector')
+        window.geometry('1000x500')
         window.resizable(False, False)
 
         path = Path(__file__).parent / './../resources/login.png'
@@ -23,32 +23,32 @@ class Login:
         self.project_url['font'] = ('Calibri', 12)
         self.project_url['bg'] = '#D9D9D9'
         self.project_url['justify'] = 'center'
-        self.project_url.place(width=330, height=44, x=85, y=170)
+        self.project_url.place(width=330, height=44, x=590, y=136)
 
         self.core_id = Entry(window)
         self.core_id['font'] = ('Calibri', 12)
         self.core_id['bg'] = '#D9D9D9'
         self.core_id['justify'] = 'center'
-        self.core_id.place(width=330, height=44, x=85, y=260)
+        self.core_id.place(width=330, height=44, x=590, y=227)
 
         self.password = Entry(window)
         self.password['font'] = ('Calibri', 12)
         self.password['bg'] = '#D9D9D9'
         self.password['justify'] = 'center'
         self.password['show'] = '*'
-        self.password.place(width=330, height=44, x=85, y=350)
+        self.password.place(width=330, height=44, x=590, y=315)
 
         self.log_in = Button(window)
         self.log_in['font'] = ('Calibri', 12)
-        self.log_in['bg'] = '#687857'
+        self.log_in['bg'] = '#783176'
         self.log_in['text'] = 'LOG IN'
-        self.log_in.place(width=100, height=42, x=200, y=415)
+        self.log_in.place(width=100, height=42, x=704, y=381)
 
         self.message = Label(window)
         self.message['text'] = ''
         self.message['font'] = ('Calibri', 8)
-        self.message['bg'] = '#687857'
-        self.message.place(width=330, height=25, x=85, y=475)
+        self.message['bg'] = '#F6F7F7'
+        self.message.place(width=330, height=25, x=590, y=440)
 
     def get_project_url(self):
         return self.url.get()
