@@ -4,7 +4,7 @@ from pathlib import Path
 
 class Login:
     def __init__(self, window=None):
-        window.title('TInspector')
+        window.title('TInspector - Automatic Test Cycle Inspector')
         window.geometry('1000x500')
         window.resizable(False, False)
 
