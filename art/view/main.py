@@ -5,7 +5,7 @@ class Main:
     def __init__(self, window=None):
         self.window = window
 
-        self.window.title('ART - Automatic Review Tool')
+        self.window.title('TInpector - Automatic Test Cycle Inspector')
         self.window.geometry('1280x720')
         self.window.resizable(True, True)
 
