@@ -66,7 +66,7 @@ class Issues:
         if self.check_test_cycle_id_input():
             self.crs_model = crs_model.Issues(self.zephyr_connection, self.jira_connection, self.test_cycle_id)
             if not self.crs_model.test_cycle_issue:
-                self.crs_frame.show_error("Invalid issue", 'The issue ID is invalid or does not exist!')
+                self.crs_frame.show_error("Invalid Test Cycle", 'The Test Cycle ID is invalid or does not exist!')
                 self.crs_model = None
                 return False
         return True

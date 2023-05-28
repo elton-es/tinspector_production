@@ -7,20 +7,21 @@ class Issues:
         self.jira_connection = jira_connection
         try:
             self.test_cycle_issue = self.zephyr_connection.api.test_cycles.get_test_cycle(test_cycle_id)
-            self.number_of_failed_test_executions = 0
-            self.number_of_linked_issues = 0
-            self.test_executions_ids = []
-            self.failed_test_executions_issues = []
-            self.linked_issues_ids = []
-            self.issues_objects = []
-            self.set_test_executions_ids()
-            self.set_failed_test_executions_issues()
-            self.set_linked_issues_ids_and_objects()
-            self.set_number_of_failed_test_executions()
-            self.set_number_of_linked_issues()
-            self.issues_data = []
-            self.set_issues_data()
-        except JIRAError as e:
+            if self.test_cycle_issue:
+                self.number_of_failed_test_executions = 0
+                self.number_of_linked_issues = 0
+                self.test_executions_ids = []
+                self.failed_test_executions_issues = []
+                self.linked_issues_ids = []
+                self.issues_objects = []
+                self.set_test_executions_ids()
+                self.set_failed_test_executions_issues()
+                self.set_linked_issues_ids_and_objects()
+                self.set_number_of_failed_test_executions()
+                self.set_number_of_linked_issues()
+                self.issues_data = []
+                self.set_issues_data()
+        except Exception as e:
             print('The issue ID is invalid or does not exist!\n' + str(e))
             self.test_cycle_issue = None
 

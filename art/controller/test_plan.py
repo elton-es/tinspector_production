@@ -42,6 +42,7 @@ class TestPlan:
             name = self.test_plan_model.get_name()
             description = self.test_plan_model.get_description()
             status = self.test_plan_model.get_status()
+            self.clear_tv_values()
             self.tp_frame.set_tv_value(1, 1, name)
             self.tp_frame.set_tv_value(1, 2, description)
             self.tp_frame.set_tv_value(1, 3, status)
@@ -61,3 +62,9 @@ class TestPlan:
                 self.tp_frame.set_tv_value(1, 4, 'Not OK')
                 self.tp_frame.set_tv_value(1, 5, note)
 
+    def clear_tv_values(self):
+        self.tp_frame.set_tv_value(1, 1, '')
+        self.tp_frame.set_tv_value(1, 2, '')
+        self.tp_frame.set_tv_value(1, 3, '')
+        self.tp_frame.set_tv_value(1, 4, '')
+        self.tp_frame.set_tv_value(1, 5, '')
