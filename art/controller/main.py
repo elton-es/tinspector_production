@@ -1,6 +1,6 @@
-from art.model.validator.test_plan import validator
-
 from art.view import main
+
+from art.view import about as about
 
 from art.controller import login as login_controller
 from art.controller import test_plan as test_plan_controller
@@ -25,6 +25,9 @@ class Controller:
 
         # Setting up the issues controller
         self.crs_controller = None
+
+        # Setting up the about page
+        self.about_view = None
 
         self.root = window
         self.main_window = None
@@ -51,6 +54,7 @@ class Controller:
         self.main_window.show_menu.entryconfig(0, command=self.show_tp_frame)
         self.main_window.show_menu.entryconfig(1, command=self.show_tc_frame)
         self.main_window.show_menu.entryconfig(3, command=self.show_crs_frame)
+        self.main_window.help_menu.entryconfig(0, command=self.show_about_page)
 
     def show_tp_frame(self):
         self.hide_all_frames()
@@ -63,6 +67,9 @@ class Controller:
     def show_crs_frame(self):
         self.hide_all_frames()
         self.crs_controller.crs_frame.frame.pack(fill='both', expand=1)
+
+    def show_about_page(self):
+        self.about_view = about.About(self.main_window)
 
     def hide_all_frames(self):
         self.test_plan_controller.tp_frame.frame.pack_forget()
